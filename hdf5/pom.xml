@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.cgi</groupId>
+		<artifactId>hdf5-parent</artifactId>
+		<version>1.8.14</version>
+	</parent>
+	
+	<artifactId>hdf5</artifactId>
+	<packaging>nar</packaging>
+
+	<name>HDF5 :: HDF5 Core library</name>
+	<description>
+		HDF5 library
+	</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>zlib</groupId>
+			<artifactId>zlib</artifactId>
+			<type>nar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.cgi</groupId>
+			<artifactId>szip</artifactId>
+			<type>nar</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.maven-nar</groupId>
+				<artifactId>nar-maven-plugin</artifactId>
+				<version>${nar-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<libraries>
+						<library>
+							<type>shared</type>
+						</library>
+					</libraries>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>strip-version-from-sharedlib</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<fileSets>
+								<fileSet>
+									<sourceFile>${project.build.directory}/nar/hdf5-${project.version}-${nar.aol}-shared/lib/${nar.aol}/shared/hdf5-${project.version}.dll</sourceFile>
+									<destinationFile>${project.build.directory}/nar/hdf5-${project.version}-${nar.aol}-shared/lib/${nar.aol}/shared/hdf5.dll</destinationFile>
+								</fileSet>
+								<fileSet>
+									<sourceFile>
+										${project.build.directory}/nar/hdf5-${project.version}-${nar.aol}-shared/lib/${nar.aol}/shared/libhdf5-${project.version}.so
+									</sourceFile>
+									<destinationFile>
+										${project.build.directory}/nar/hdf5-${project.version}-${nar.aol}-shared/lib/${nar.aol}/shared/libhdf5.so
+									</destinationFile>
+								</fileSet>
+							</fileSets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+

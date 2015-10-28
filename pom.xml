@@ -1,0 +1,162 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.cgi</groupId>
+	<artifactId>hdf5-parent</artifactId>
+	<version>1.8.14</version>
+	<packaging>pom</packaging>
+
+	<name>HDF5 :: Parent</name>
+	<description>
+		HDF5 library Parent module
+	</description>
+
+	<modules>
+		<module>hdf5</module>
+		<module>hl</module>
+	</modules>
+
+
+	<properties>
+		<!-- Maven plugin versions -->
+		<nar-plugin.version>3.2.3</nar-plugin.version>
+		<!-- Native project -->
+		<compiler-name>gcc</compiler-name>
+		<linker-name>gcc</linker-name>
+
+		<!-- dependencies -->
+		<zlib-version>1.2.8</zlib-version>
+		<szip-version>2.1.0</szip-version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.cgi</groupId>
+				<artifactId>hdf5</artifactId>
+				<version>${project.version}</version>
+				<type>nar</type>
+			</dependency>
+			<dependency>
+				<groupId>com.cgi</groupId>
+				<artifactId>hl</artifactId>
+				<version>${project.version}</version>
+				<type>nar</type>
+			</dependency>
+			<dependency>
+				<groupId>zlib</groupId>
+				<artifactId>zlib</artifactId>
+				<version>${zlib-version}</version>
+				<type>nar</type>
+			</dependency>
+			<dependency>
+				<groupId>com.cgi</groupId>
+				<artifactId>szip</artifactId>
+				<version>${szip-version}</version>
+				<type>nar</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.maven-nar</groupId>
+				<artifactId>nar-maven-plugin</artifactId>
+				<version>${nar-plugin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<cpp>
+						<name>${compiler-name}</name>
+						<includes>
+							<include>**/*.hpp</include>
+							<include>**/*.h</include>
+							<include>**/*.cpp</include>
+							<include>**/*.c</include>
+						</includes>
+						<debug>false</debug>
+						<optimize>full</optimize>
+						<options combine.children="append">
+							<option>-DHDF5_HL</option>
+							<option>-DINCLUDE_HL</option>
+						</options>
+					</cpp>
+					
+					<linker>
+						<name>${linker-name}</name>
+						<sysLibs combine.children="append">
+							<sysLib>
+								<name>z</name>
+							</sysLib>
+							<sysLib>
+								<name>m</name>
+							</sysLib>
+						</sysLibs>
+					</linker>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>windows-common</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.maven-nar</groupId>
+						<artifactId>nar-maven-plugin</artifactId>
+						<extensions>true</extensions>
+						<configuration>
+							<cpp>
+								<options combine.children="append">
+									<option>-mthreads</option>
+								</options>
+							</cpp>
+							<linker>
+								<sysLibs combine.children="append">
+									<sysLib>
+										<name>ws2_32</name>
+									</sysLib>
+								</sysLibs>
+							</linker>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>linux-common</id>
+			<activation>
+				<os>
+					<family>linux</family>
+				</os>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.maven-nar</groupId>
+						<artifactId>nar-maven-plugin</artifactId>
+						<extensions>true</extensions>
+						<configuration>
+							<cpp>
+								<options combine.children="append">
+									<option>-pthread</option>
+								</options>
+							</cpp>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
+
