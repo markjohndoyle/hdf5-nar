@@ -12,11 +12,19 @@
 	<packaging>nar</packaging>
 
 	<name>HDF5 :: HDF5 High level library</name>
-	<description>
-		HDF5 high level library
-	</description>
+	<description>HDF5 high level library.</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.cgi</groupId>
+			<artifactId>hdf5-config</artifactId>
+			<type>nar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.cgi</groupId>
+			<artifactId>hdf5</artifactId>
+			<type>nar</type>
+		</dependency>
 		<dependency>
 			<groupId>zlib</groupId>
 			<artifactId>zlib</artifactId>
@@ -25,11 +33,6 @@
 		<dependency>
 			<groupId>com.cgi</groupId>
 			<artifactId>szip</artifactId>
-			<type>nar</type>
-		</dependency>
-		<dependency>
-			<groupId>com.cgi</groupId>
-			<artifactId>hdf5</artifactId>
 			<type>nar</type>
 		</dependency>
 	</dependencies>

@@ -12,11 +12,14 @@
 	<packaging>nar</packaging>
 
 	<name>HDF5 :: HDF5 Core library</name>
-	<description>
-		HDF5 library
-	</description>
+	<description>HDF5 Core library.</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.cgi</groupId>
+			<artifactId>hdf5-config</artifactId>
+			<type>nar</type>
+		</dependency>
 		<dependency>
 			<groupId>zlib</groupId>
 			<artifactId>zlib</artifactId>

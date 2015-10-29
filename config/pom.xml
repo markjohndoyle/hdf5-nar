@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.cgi</groupId>
+		<artifactId>hdf5-parent</artifactId>
+		<version>1.8.14</version>
+	</parent>
+	
+	<artifactId>hdf5-config</artifactId>
+	<packaging>nar</packaging>
+
+	<name>HDF5 :: Configure</name>
+	<description>
+		HDF5 library configure module. Generates headers files used by the other HDF5 modules.
+	</description>
+
+	<properties>
+		<!-- cmake configure -->
+		<cmake-config.directory>${project.basedir}</cmake-config.directory>
+		<cmake-filtered.directory>${project.build.directory}/cmake-filtered</cmake-filtered.directory>
+		<cmake-build.directory>${project.build.directory}/cmake-build</cmake-build.directory>
+		<cmake-generator>MSYS Makefiles</cmake-generator>
+		<HDF5_SOURCE_DIR>${portable.basedir}</HDF5_SOURCE_DIR>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.github.maven-nar</groupId>
+				<artifactId>nar-maven-plugin</artifactId>
+				<version>${nar-plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<scripts>
+						<script>
+							<![CDATA[
+							project.properties['portable.basedir'] = project.basedir.absolutePath.replace('\\','/');
+							]]>
+						</script>
+					</scripts>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-all</artifactId>
+						<version>2.4.4</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>copy-and-filter-CMakeLists-text-files</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${cmake-filtered.directory}</outputDirectory>
+							<resources>          
+								<resource>
+									<directory>${cmake-config.directory}</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>CMakeLists.txt</include>
+										<include>*.cmake</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>            
+					</execution>
+					<execution>
+						<id>copy-generated-headers-to-src-for-packaging</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/src/main/include</outputDirectory>
+							<resources>          
+								<resource>
+									<directory>${cmake-build.directory}</directory>
+									<filtering>false</filtering>
+									<includes>
+										<include>*.h</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>            
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.googlecode.cmake-maven-project</groupId>
+				<artifactId>cmake-maven-plugin</artifactId>
+				<inherited>false</inherited>
+				<executions>
+					<execution>
+						<id>cmake-generate</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<sourcePath>${cmake-filtered.directory}</sourcePath>
+							<targetPath>${cmake-build.directory}</targetPath>
+							<generator>${cmake-generator}</generator>
+							<options>
+								<option>-DBUILD_SHARED_LIBS:bool=on</option> 
+							</options>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+</project>
+

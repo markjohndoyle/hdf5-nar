@@ -13,25 +13,32 @@
 	</description>
 
 	<modules>
+		<module>config</module>
 		<module>hdf5</module>
 		<module>hl</module>
 	</modules>
 
-
 	<properties>
 		<!-- Maven plugin versions -->
 		<nar-plugin.version>3.2.3</nar-plugin.version>
+		<build-helper-plugin.version>1.9.1</build-helper-plugin.version>
+		<cmake-plugin.version>2.8.11-b4</cmake-plugin.version>
 		<!-- Native project -->
 		<compiler-name>gcc</compiler-name>
 		<linker-name>gcc</linker-name>
-
 		<!-- dependencies -->
-		<zlib-version>1.2.8</zlib-version>
-		<szip-version>2.1.0</szip-version>
+		<zlib.version>1.2.8</zlib.version>
+		<szip.version>2.1.0</szip.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.cgi</groupId>
+				<artifactId>hdf5-config</artifactId>
+				<version>${project.version}</version>
+				<type>nar</type>
+			</dependency>
 			<dependency>
 				<groupId>com.cgi</groupId>
 				<artifactId>hdf5</artifactId>
@@ -47,13 +54,13 @@
 			<dependency>
 				<groupId>zlib</groupId>
 				<artifactId>zlib</artifactId>
-				<version>${zlib-version}</version>
+				<version>${zlib.version}</version>
 				<type>nar</type>
 			</dependency>
 			<dependency>
 				<groupId>com.cgi</groupId>
 				<artifactId>szip</artifactId>
-				<version>${szip-version}</version>
+				<version>${szip.version}</version>
 				<type>nar</type>
 			</dependency>
 		</dependencies>
@@ -61,6 +68,35 @@
 
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.github.maven-nar</groupId>
+					<artifactId>nar-maven-plugin</artifactId>
+					<version>${nar-plugin.version}</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.gmavenplus</groupId>
+					<artifactId>gmavenplus-plugin</artifactId>
+					<version>1.5</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.7</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>com.googlecode.cmake-maven-project</groupId>
+					<artifactId>cmake-maven-plugin</artifactId>
+					<version>${cmake-plugin.version}</version>
+					<extensions>true</extensions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>com.github.maven-nar</groupId>
@@ -78,12 +114,8 @@
 						</includes>
 						<debug>false</debug>
 						<optimize>full</optimize>
-						<options combine.children="append">
-							<option>-DHDF5_HL</option>
-							<option>-DINCLUDE_HL</option>
-						</options>
 					</cpp>
-					
+
 					<linker>
 						<name>${linker-name}</name>
 						<sysLibs combine.children="append">
@@ -102,7 +134,7 @@
 
 	<profiles>
 		<profile>
-			<id>windows-common</id>
+			<id>windows-common-native-config</id>
 			<activation>
 				<os>
 					<family>windows</family>
@@ -113,7 +145,6 @@
 					<plugin>
 						<groupId>com.github.maven-nar</groupId>
 						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
 						<configuration>
 							<cpp>
 								<options combine.children="append">
@@ -134,7 +165,7 @@
 		</profile>
 
 		<profile>
-			<id>linux-common</id>
+			<id>linux-common-native-config</id>
 			<activation>
 				<os>
 					<family>linux</family>
@@ -145,7 +176,6 @@
 					<plugin>
 						<groupId>com.github.maven-nar</groupId>
 						<artifactId>nar-maven-plugin</artifactId>
-						<extensions>true</extensions>
 						<configuration>
 							<cpp>
 								<options combine.children="append">
