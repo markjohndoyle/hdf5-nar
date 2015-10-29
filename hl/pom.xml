@@ -43,7 +43,6 @@
 				<groupId>com.github.maven-nar</groupId>
 				<artifactId>nar-maven-plugin</artifactId>
 				<version>${nar-plugin.version}</version>
-				<extensions>true</extensions>
 				<configuration>
 					<libraries>
 						<library>
@@ -60,6 +59,10 @@
 				</configuration>
 			</plugin>
 
+			<!-- 
+				Hack for downstream projects requiring specific lib name in theif configure scripts.
+				Will be removed once they are mavensied...hopefully.
+			-->
 			<plugin>
 				<groupId>com.coderplus.maven.plugins</groupId>
 				<artifactId>copy-rename-maven-plugin</artifactId>
