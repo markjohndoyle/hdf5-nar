@@ -23,14 +23,27 @@
 		<cmake-build.directory>${project.build.directory}/cmake-build</cmake-build.directory>
 		<cmake-generator>MSYS Makefiles</cmake-generator>
 		<HDF5_SOURCE_DIR>${portable.basedir}</HDF5_SOURCE_DIR>
+
+		<!-- HDF5-configure specific dependencies -->
+		<groovy-all.version>2.4.4</groovy-all.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy-all</artifactId>
+				<version>${groovy-all.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.github.maven-nar</groupId>
 				<artifactId>nar-maven-plugin</artifactId>
-				<version>${nar-plugin.version}</version>
 				<extensions>true</extensions>
 			</plugin>
 
@@ -58,8 +71,6 @@
 					<dependency>
 						<groupId>org.codehaus.groovy</groupId>
 						<artifactId>groovy-all</artifactId>
-						<version>2.4.4</version>
-						<scope>runtime</scope>
 					</dependency>
 				</dependencies>
 			</plugin>
