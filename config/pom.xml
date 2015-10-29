@@ -28,17 +28,6 @@
 		<groovy-all.version>2.4.4</groovy-all.version>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.codehaus.groovy</groupId>
-				<artifactId>groovy-all</artifactId>
-				<version>${groovy-all.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -71,6 +60,8 @@
 					<dependency>
 						<groupId>org.codehaus.groovy</groupId>
 						<artifactId>groovy-all</artifactId>
+						<version>${groovy-all.version}</version>
+						<scope>runtime</scope>
 					</dependency>
 				</dependencies>
 			</plugin>
