@@ -29,3 +29,6 @@
 
 # Maven
 target/
+
+# Linux
+*.*~
