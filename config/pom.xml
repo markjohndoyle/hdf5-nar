@@ -34,6 +34,15 @@
 				<groupId>com.github.maven-nar</groupId>
 				<artifactId>nar-maven-plugin</artifactId>
 				<extensions>true</extensions>
+				<configuration>
+					<cpp>
+						<includePaths>
+							<includePath>
+								<path>${cmake-build.directory}</path>
+							</includePath>
+						</includePaths>
+					</cpp>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -91,25 +100,6 @@
 							</resources>
 						</configuration>            
 					</execution>
-					<execution>
-						<id>copy-generated-headers-to-src-for-packaging</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/src/main/include</outputDirectory>
-							<resources>          
-								<resource>
-									<directory>${cmake-build.directory}</directory>
-									<filtering>false</filtering>
-									<includes>
-										<include>*.h</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>            
-					</execution>
 				</executions>
 			</plugin>
 
@@ -128,13 +118,6 @@
 							<sourcePath>${cmake-filtered.directory}</sourcePath>
 							<targetPath>${cmake-build.directory}</targetPath>
 							<generator>${cmake-generator}</generator>
-							<!--<options>
-								<option>-DBUILD_SHARED_LIBS:bool=on</option>
-								<option>-DHDF5_ENABLE_SZIP_SUPPORT:bool=on</option>
-								<option>-DHDF5_ENABLE_Z_LIB_SUPPORT:bool=on</option> 
-								<option>-DZLIB_USE_EXTERNAL:bool=on</option> 
-								<option>-SZIP_USE_EXTERNAL:bool=on</option> 
-							</options>-->
 						</configuration>
 					</execution>
 				</executions>
