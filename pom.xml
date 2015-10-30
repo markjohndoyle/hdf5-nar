@@ -116,16 +116,20 @@
 						</includes>
 						<debug>false</debug>
 						<optimize>full</optimize>
+						<defines>
+							<define>H5_HAVE_LIBZ</define>
+							<define>_GNU_SOURCE</define>
+						</defines>
 					</cpp>
 
 					<linker>
 						<name>${linker-name}</name>
 						<sysLibs combine.children="append">
 							<sysLib>
-								<name>z</name>
+								<name>m</name>
 							</sysLib>
 							<sysLib>
-								<name>m</name>
+								<name>stdc++</name>
 							</sysLib>
 						</sysLibs>
 					</linker>

@@ -128,9 +128,13 @@
 							<sourcePath>${cmake-filtered.directory}</sourcePath>
 							<targetPath>${cmake-build.directory}</targetPath>
 							<generator>${cmake-generator}</generator>
-							<options>
-								<option>-DBUILD_SHARED_LIBS:bool=on</option> 
-							</options>
+							<!--<options>
+								<option>-DBUILD_SHARED_LIBS:bool=on</option>
+								<option>-DHDF5_ENABLE_SZIP_SUPPORT:bool=on</option>
+								<option>-DHDF5_ENABLE_Z_LIB_SUPPORT:bool=on</option> 
+								<option>-DZLIB_USE_EXTERNAL:bool=on</option> 
+								<option>-SZIP_USE_EXTERNAL:bool=on</option> 
+							</options>-->
 						</configuration>
 					</execution>
 				</executions>
@@ -140,4 +144,5 @@
 	</build>
 
 </project>
+
 
